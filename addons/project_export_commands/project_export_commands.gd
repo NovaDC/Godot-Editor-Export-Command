@@ -1,7 +1,7 @@
 @tool
 @icon("res://addons/project_export_commands/icon.svg")
-extends EditorExportCommand
 class_name ProjectExportCommands
+extends EditorExportCommand
 
 ## A plugin using [EditorExportCommand] to provide the ability for CLI commands
 ## set in the [ProjectSettings] to run during export.
@@ -23,7 +23,7 @@ const PROJECT_EXPORT_COMMANDS_PATHS = {
 const PROJECT_EXPORT_COMMANDS_STAY_OPEN_PATH:String = "application/export/other_commands/stay_open"
 ## This is simply manually mirroring the name set in the plugin.cfg,
 ## since its not queryable in engine (at the time of writing this).
-const PLUGIN_NAME = "ProjectExportCommands"
+const PLUGIN_NAME = "project_export_commands"
 
 func _get_name():
 	return PLUGIN_NAME
@@ -73,8 +73,8 @@ func __run_project_export_commands(phase:ExportCommandPhase):
 	if not get_option("project_export_commands/run_commands"):
 		return
 	var stay_open:bool = ProjectSettings.get_setting(PROJECT_EXPORT_COMMANDS_STAY_OPEN_PATH, true)
-	for command in get_project_export_commands(phase):
+	for command in ProjectExportCommands.get_project_export_commands(phase):
 		if command == null or command == "":
 			continue
 		var command_array:Array = command.split(" ", true)
-		launch_external_command(command_array[0], command_array.slice(1), stay_open)
+		EditorExportCommand.launch_external_command(command_array[0], command_array.slice(1), stay_open)

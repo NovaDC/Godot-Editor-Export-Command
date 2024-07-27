@@ -11,7 +11,7 @@ extends EditorExportPlugin
 
 ## This is simply manually mirroring the name set in the plugin.cfg,
 ## since its not queryable in engine (at the time of writing this).
-const EEC_PLUGIN_NAME := "EditorExportCommand"
+const EEC_PLUGIN_NAME := "editor_export_command"
 
 var __is_exporting := false
 

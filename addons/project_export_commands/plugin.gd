@@ -11,16 +11,16 @@ func _get_plugin_name():
 	return ProjectExportCommands.PLUGIN_NAME
 
 func _enter_tree():
-	__init_plugin()
+	init_plugin()
 
 func _enable_plugin():
-	__init_plugin()
+	init_plugin()
 
 func _disable_plugin():
-	__deinit_plugin()
+	deinit_plugin()
 
 func _exit_tree():
-	__deinit_plugin()
+	deinit_plugin()
 
 ## Export a command file.[br]
 ## Path is selected with the editor file selector.
@@ -90,15 +90,23 @@ static func import_project_commands():
 	await fileselect.visibility_changed
 	fileselect.queue_free()
 
-func __init_plugin():
+## This method is safe to be called multiple times, and even when the plugin is not enabled, as it checks this internally
+## This method is mostly for convenience, making it easy to ensure the plugin is initialised wherever its reasonably possible
+## This is not expected to be usefull outside of its own script, as this behaviour is already registered to be handled on load / enable
+func init_plugin():
 	ProjectExportCommands.init_project_export_commands()
 	add_tool_menu_item("Import Project Commands...", import_project_commands)
 	add_tool_menu_item("Export Project Commands...", export_project_commands)
 	if __current_inst == null and EditorInterface.is_plugin_enabled(ProjectExportCommands.PLUGIN_NAME):
 		__current_inst = ProjectExportCommands.new()
 		add_export_plugin(__current_inst)
+	if not EditorInterface.is_plugin_enabled(EditorExportCommand.EEC_PLUGIN_NAME):
+		push_warning("In order for the %s plugin to work, you must import and enable %s plugin first." % [ProjectExportCommands.PLUGIN_NAME, EditorExportCommand.EEC_PLUGIN_NAME])
 
-func __deinit_plugin():
+## This method is safe to be called multiple times, and even when the plugin is not enabled, though it will deregister the export plugin regardless of the plugins enable state. NOTE this behaviour, as it is explicitly divergent from [[init_export_plugin]] in this specific sense! 
+## This method is mostly for convenience, making it easy to ensure the plugin is destroyed wherever its reasonably possible
+## This is not expected to be usefull outside of its own script, as this behaviour is already registered to be handled on unload / disable
+func deinit_plugin():
 	remove_tool_menu_item("Import Project Commands...")
 	remove_tool_menu_item("Export Project Commands...")
 	if __current_inst != null:
