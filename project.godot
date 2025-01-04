@@ -11,15 +11,9 @@ config_version=5
 [application]
 
 config/name="Project Export Commands"
-config/version="1.0.0.0"
-config/tags=PackedStringArray("inprogress", "tool")
+config/version="2.0.0.0"
 config/features=PackedStringArray("4.2", "GL Compatibility")
-boot_splash/image="res://icon.png"
-config/icon="res://icon.png"
-
-[editor_plugins]
-
-enabled=PackedStringArray("res://addons/editor_export_command/plugin.cfg", "res://addons/project_export_commands/plugin.cfg")
+config/icon="res://addons/commands_export_plugin/icon.svg"
 
 [rendering]
 
